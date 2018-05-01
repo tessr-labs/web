@@ -33,7 +33,7 @@
 					<span class="ti ti-align-justify"></span>
 					</span>
 				</button>
-				<a href="../docs/Legal_T&C.pdf" class="btn btn-alt btn-sm" download>Legal T&C Document</a>
+				<a href="../docs/Legal_T%26C.pdf" class="btn btn-alt btn-sm" download>Legal T&amp;C Document</a>
 				<div class="collapse navbar-collapse justify-content-end" id="navbarToggle">
 					<ul class="navbar-nav animated" data-animate="fadeInDown" data-delay=".9">
 						<li class="nav-item"><a class="nav-link menu-link" href="../index.html">Home<span class="sr-only">(current)</span></a></li>
