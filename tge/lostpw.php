@@ -17,8 +17,8 @@ function recover_pw($email_address){
 		exit();
 	}
 	// quick check to see if record exists	
-	$sql_check = mysql_query("SELECT * FROM users WHERE email_address='$email_address'");
-	$sql_check_num = mysql_num_rows($sql_check);
+	$sql_check = mysqli_query($connection,"SELECT * FROM users WHERE email_address='$email_address'");
+	$sql_check_num = mysqli_num_rows($sql_check);
 	if($sql_check_num == 0){
 		echo "No records found matching your email address<br />";
 		include 'lost_pw.html';
@@ -43,7 +43,7 @@ function recover_pw($email_address){
 
 	$db_password = md5($random_password);
 	
-	$sql = mysql_query("UPDATE users SET password='$db_password' WHERE email_address='$email_address'");
+	$sql = mysqli_query($connection,"UPDATE users SET password='$db_password' WHERE email_address='$email_address'");
 	
 	$subject = "Your Password at MyWebsite!";
 	$message = "Hi, we have reset your password.

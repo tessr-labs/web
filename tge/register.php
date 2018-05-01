@@ -1,3 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="Tessr.io">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Tessr is a unified protocol suite providing interoperability between blockchains">
+	<!-- Fav Icon  -->
+	<link rel="shortcut icon" href="../images/favicon.png">
+	<!-- Site Title  -->
+	<title>Tessr - a unified protocol suite providing interoperability between blockchains</title>
+	<!-- Vendor Bundle CSS -->
+	<link rel="stylesheet" href="../assets/css/vendor.bundle.css">
+	<!-- Custom styles for this template -->
+	<link rel="stylesheet" href="../assets/css/style.css?ver=113">
+	<link rel="stylesheet" href="../assets/css/theme.css?ver=113">
+</head>
+<body class="theme-dark io-dark io-dark-light" data-spy="scroll" data-target="#mainnav" data-offset="80">
+	<!-- Header --> 
+	<header class="site-header is-sticky">
+		<!-- Place Particle Js -->
+		<div id="particles-js" class="particles-container particles-js"></div>
+		<!-- Navbar -->
+		<div class="navbar navbar-expand-lg is-transparent" id="mainnav">
+			<nav class="container">
+				<a class="navbar-brand animated" data-animate="fadeInDown" data-delay=".65" href="../">
+					<img class="logo logo-dark" alt="logo" src="../images/logo.png" srcset="../images/logo2x.png 2x">
+					<img class="logo logo-light" alt="logo" src="../images/logo-white.png" srcset="../images/logo-white2x.png 2x">
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle">
+					<span class="navbar-toggler-icon">
+					<span class="ti ti-align-justify"></span>
+					</span>
+				</button>
+				<a href="../docs/Legal_T&C.pdf" class="btn btn-alt btn-sm" download>Legal T&C Document</a>
+				<div class="collapse navbar-collapse justify-content-end" id="navbarToggle">
+					<ul class="navbar-nav animated" data-animate="fadeInDown" data-delay=".9">
+						<li class="nav-item"><a class="nav-link menu-link" href="../index.html">Home<span class="sr-only">(current)</span></a></li>
+						<li class="nav-item"><a class="nav-link menu-link" href="login_form.html">Sign In</a></li>
+						<li class="nav-item"><a class="nav-link menu-link" href="join_form.html">Register</a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<!-- End Navbar -->
+	</header>
+	<!-- End Header -->
+	<!-- Start Section -->
+	<div class="section section-pad section-bg-alt">
+		<div class="container">
+			<div class="row text-center">
+				<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+					<div class="section-head" id="tokenSale">
 <?
 
 include 'db.php';
@@ -35,7 +89,7 @@ if((!$first_name) || (!$last_name) || (!$email_address) || (!$username)){
 	if(!$username){
 		echo "Desired Username is a required field. Please enter it below.<br />";
 	}
-	include 'join_form.html'; // Show the form again!
+	include 'join_form.php'; // Show the form again!
 	/* End the error checking and if everything is ok, we'll move on to
 	 creating the user account */
 	exit(); // if the error checking has failed, we'll exit the script!
@@ -44,11 +98,11 @@ if((!$first_name) || (!$last_name) || (!$email_address) || (!$username)){
 /* Let's do some checking and ensure that the user's email address or username
  does not exist in the database */
  
- $sql_email_check = mysql_query("SELECT email_address FROM users WHERE email_address='$email_address'");
- $sql_username_check = mysql_query("SELECT username FROM users WHERE username='$username'");
+ $sql_email_check = mysqli_query($connection,"SELECT email_address FROM users WHERE email_address='$email_address'");
+ $sql_username_check = mysqli_query($connection,"SELECT username FROM users WHERE username='$username'");
  
- $email_check = mysql_num_rows($sql_email_check);
- $username_check = mysql_num_rows($sql_username_check);
+ $email_check = mysqli_num_rows($sql_email_check);
+ $username_check = mysqli_num_rows($sql_username_check);
  
  if(($email_check > 0) || ($username_check > 0)){
  	echo "Please fix the following errors: <br />";
@@ -60,7 +114,7 @@ if((!$first_name) || (!$last_name) || (!$email_address) || (!$username)){
  		echo "The username you have selected has already been used by another member in our database. Please choose a different Username!<br />";
  		unset($username);
  	}
- 	include 'join_form.html'; // Show the form again!
+ 	include 'join_form.php'; // Show the form again!
  	exit();  // exit the script so that we do not create this account!
  }
  
@@ -73,7 +127,6 @@ http://www.phpfreaks.com/quickcode/Random_Password_Generator/56.php
 We'll generate a random password for the
 user and encrypt it, email it and then enter it into the db.
 */
-
 function makeRandomPassword() {
   $salt = "abchefghjkmnpqrstuvwxyz0123456789";
   srand((double)microtime()*1000000); 
@@ -93,33 +146,56 @@ $db_password = md5($random_password);
 
 // Enter info into the Database.
 $info2 = htmlspecialchars($info);
-$sql = mysql_query("INSERT INTO users (first_name, last_name, email_address, username, password, info, signup_date)
-		VALUES('$first_name', '$last_name', '$email_address', '$username', '$db_password', '$info2', now())") or die (mysql_error());
+$sql = mysqli_query($connection,"INSERT INTO users (first_name, last_name, email_address, username, password, info, signup_date)
+		VALUES('$first_name', '$last_name', '$email_address', '$username', '$db_password', '$info2', now())") or die (mysqli_error());
 
 if(!$sql){
-	echo 'There has been an error creating your account. Please contact the webmaster.';
+	echo 'There has been an error creating your account. Please contact team@tessr.io.';
 } else {
-	$userid = mysql_insert_id();
+	$userid = mysqli_insert_id();
 	// Let's mail the user!
-	$subject = "Your Membership at MyWebsite!";
+	$subject = "TessrX TGE Signup";
 	$message = "Dear $first_name $last_name,
-	Thank you for registering at our website, http://www.mydomain.com!
+	Thank you for registering for TessrX Token Generation Event, http://www.tessr.io
 	
-	You are two steps away from logging in and accessing our exclusive members area.
+	You are two steps away from logging in and accessing our exclusive pre-crowdsale.
 	
-	To activate your membership, please click here: http://www.mydomain.com/activate.php?id=$userid&code=$db_password
+	To activate your membership, please click here: https://www.tessr.io/tge/activate.php?id=$userid&code=$db_password
 	
 	Once you activate your memebership, you will be able to login with the following information:
 	Username: $username
 	Password: $random_password
 	
-	Thanks!
-	The Webmaster
+	Thank You!
+	The Tessr Team
+	team@tessr.io
 	
 	This is an automated response, please do not reply!";
 	
-	mail($email_address, $subject, $message, "From: MyDomain Webmaster<admin@mydomain.com>\nX-Mailer: PHP/" . phpversion());
+	mail($email_address, $subject, $message, "From: tessr.io Webmaster<team@tessr.io>\nX-Mailer: PHP/" . phpversion());
 	echo 'Your membership information has been mailed to your email address! Please check it and follow the directions!';
 }
 
 ?>
+					</div>
+				</div>
+			</div>
+		</div><!-- .container  -->
+	</div>
+	<!-- Start Section -->
+	<!-- Preloader !remove please if you do not want -->
+	<div id="preloader">
+		<div id="loader"></div>
+		<div class="loader-section loader-top"></div>
+   		<div class="loader-section loader-bottom"></div>
+	</div>
+	<!-- Preloader End -->
+	<!-- JavaScript (include all script here) -->
+	<script src="../assets/js/jquery.bundle.js?ver=113"></script>
+	<script src="../assets/js/script.js?ver=113"></script>
+</body>
+<script>'undefined'=== typeof _trfq || (window._trfq = []);'undefined'=== typeof _trfd && (window._trfd=[]),_trfd.push({'tccl.baseHost':'secureserver.net'}),_trfd.push({'ap':'cpsh'},{'server':'a2plcpnl0172'}) // Monitoring performance to make your website faster. If you want to opt-out, please contact web hosting support.</script><script src='https://img1.wsimg.com/tcc/tcc_l.combined.1.0.6.min.js'></script></html>
+
+
+
+

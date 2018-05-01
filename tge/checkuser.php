@@ -17,11 +17,11 @@ if((!$username) || (!$password)){
 $password = md5($password);
 
 // check if the user info validates the db
-$sql = mysql_query("SELECT * FROM users WHERE username='$username' AND password='$password' AND activated='1'");
-$login_check = mysql_num_rows($sql);
+$sql = mysqli_query($connection,"SELECT * FROM users WHERE username='$username' AND password='$password' AND activated='1'");
+$login_check = mysqli_num_rows($sql);
 
 if($login_check > 0){
-	while($row = mysql_fetch_array($sql)){
+	while($row = mysqli_fetch_array($sql)){
 	foreach( $row AS $key => $val ){
 		$$key = stripslashes( $val );
 	}
@@ -35,7 +35,7 @@ if($login_check > 0){
 		session_register('special_user');
 		$_SESSION['user_level'] = $user_level;
 		
-		mysql_query("UPDATE users SET last_login=now() WHERE userid='$userid'");
+		mysqli_query($connection,"UPDATE users SET last_login=now() WHERE userid='$userid'");
 		
 		header("Location: login_success.php");
 	}
